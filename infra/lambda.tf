@@ -56,6 +56,12 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = filebase64sha256("${path.module}/lambda.zip")
   memory_size      = 128
   timeout          = 120
+
+  environment {
+        variables = {
+            BUCKET_NAME = var.bucket_name
+        }
+    }
 }
 
 resource "aws_cloudwatch_log_group" "example"{
