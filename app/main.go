@@ -24,6 +24,8 @@ func main() {
 }
 
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	fmt.Println("Request received:", req)
+
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		return events.APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError, Body: "Erro ao criar config aws: " + err.Error()}, nil
@@ -33,8 +35,11 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	presignClient := s3.NewPresignClient(client)
 
 	bucketName := os.Getenv("BUCKET_NAME")
+	fmt.Println("Bucket: " + bucketName)
+
 	fileName := req.QueryStringParameters["fileName"]
 	if fileName == "" {
+		fmt.Println("fileName parameter is missing")
 		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest, Body: "Missing fileName param"}, nil
 	}
 
@@ -45,6 +50,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 
 	presignedReq, err := presignClient.PresignPutObject(ctx, reqPut, s3.WithPresignExpires(15*time.Minute))
 	if err != nil {
+		fmt.Println("Error generating presigned URL:", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500, Body: fmt.Sprintf("Error ao gerar URL pre assinada: %v", err)}, nil
 	}
 
