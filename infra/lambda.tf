@@ -68,5 +68,5 @@ resource "aws_lambda_permission" "apigw_lambda_permission" {
     function_name = aws_lambda_function.lambda.function_name
     principal = "apigateway.amazonaws.com"
     statement_id = "AllowExecutionFromAPIGateway"
-    source_arn = "arn:aws:apigateway:us-east-1::/restapis/5oq7x8vhsf/*"
+    source_arn = "arn:aws:execute-api:us-east-1:337328321041:5oq7x8vhsf/*"
 }
