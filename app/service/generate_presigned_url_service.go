@@ -25,8 +25,12 @@ func NewGeneratePresignedURLService(presignClient *s3.PresignClient) *GeneratePr
 }	
 
 func (gpu *GeneratePresignedURLService)GeneratePresignedURL(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	bucketName := os.Getenv("BUCKET_NAME")
-	fmt.Println("Bucket: " + bucketName)
+	bucketName := req.QueryStringParameters["bucketName"]
+	if bucketName == "" {
+		bucketName = os.Getenv("BUCKET_NAME")
+	}
+
+	fmt.Println("Bucket Name:", bucketName)
 
 	fileName := req.QueryStringParameters["fileName"]
 	if fileName == "" {
