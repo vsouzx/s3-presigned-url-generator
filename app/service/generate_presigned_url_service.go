@@ -43,7 +43,7 @@ func (gpu *GeneratePresignedURLService)GeneratePresignedURL(ctx context.Context,
 		Key:    aws.String(fileName),
 	}
 
-	presignedReq, err := gpu.presignClient.PresignPutObject(ctx, reqPut, s3.WithPresignExpires(15*time.Minute))
+	presignedReq, err := gpu.presignClient.PresignPutObject(ctx, reqPut, s3.WithPresignExpires(60*time.Minute))
 	if err != nil {
 		fmt.Println("Error generating presigned URL:", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500, Body: fmt.Sprintf("Error ao gerar URL pre assinada: %v", err)}, nil
